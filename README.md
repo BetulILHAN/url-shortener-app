@@ -1,4 +1,4 @@
-# 🔗 URL Shortener Backend
+# 🔗 URL Shortener App
 
 The Url shortener allows the user to get a short url from a long url. The user can then use this short url to access to the link associated to the original long url.
 Detailed technical informations are given bellow.
@@ -87,7 +87,7 @@ This project is a frontend built with **React**, **TypeScript**, and **Vite**. I
 
 ---
 
-## Technologies Used
+## 🧱 Tech Stack
 
 - React
 - TypeScript
@@ -99,7 +99,7 @@ This project is a frontend built with **React**, **TypeScript**, and **Vite**. I
 
 ---
 
-## Installation
+## Installation and Usages
 
 1. Clone the repository
 2. Install dependencies using npm :
