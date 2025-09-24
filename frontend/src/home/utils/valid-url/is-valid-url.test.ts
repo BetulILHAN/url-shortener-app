@@ -2,7 +2,6 @@ import { isValidUrl } from "./is-valid-url";
 
 describe(" Unit test for isValidUrl", () => {
   test.each([
-    // [url, expectedResult]
     ["http://example.com", true],
     ["https://example.com/path?query=1", true],
     ["https://sub.domain.co.uk", true],
@@ -12,7 +11,7 @@ describe(" Unit test for isValidUrl", () => {
     ["", false],
     ["not a url", false],
     ["https://example.com:8080/path", false],
-    ["http://localhost", false], // ça dépend de ton regex s’il accepte localhost
+    ["http://localhost", false],
   ])("returns %p for URL %s", (url, expected) => {
     expect(isValidUrl(url)).toBe(expected);
   });

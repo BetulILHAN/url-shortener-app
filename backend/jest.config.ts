@@ -8,7 +8,5 @@ module.exports = {
   roots: ["<rootDir>/app"],
   injectGlobals: true,
   preset: "ts-jest",
-  transformIgnorePatterns: [
-    "/node_modules/(?!.*\\.mjs$|.*\\.cjs$|.*\\.jsx?$)/", // Inclut tous les fichiers ESM
-  ],
+  transformIgnorePatterns: ["/node_modules/(?!.*\\.mjs$|.*\\.cjs$|.*\\.jsx?$)/"],
 };

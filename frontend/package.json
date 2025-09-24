@@ -5,10 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
-    "lint": "eslint .",
+    "test": "jest --coverage",
+    "format": "prettier --write .",
     "preview": "vite preview",
-    "test": "jest",
     "scripts": "prettier --write ."
   },
   "dependencies": {

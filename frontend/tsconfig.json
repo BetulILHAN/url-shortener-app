@@ -5,7 +5,7 @@
     { "path": "./tsconfig.node.json" }
   ],
   "compilerOptions": {
-    // ... tes autres options
     "types": ["node", "jest"]
-  }
+  },
+  "include": ["/app/**/*", "**/*.test.ts"]
 }
