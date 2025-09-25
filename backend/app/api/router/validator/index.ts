@@ -6,7 +6,7 @@ const originalUrlSchema = z.object({
 });
 
 const slugParamSchema = z.object({
-  slug: z.string().min(1).max(10),
+  slug: z.string().length(10),
 });
 
 const validateOriginalUrlBody =

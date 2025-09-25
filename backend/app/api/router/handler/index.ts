@@ -1,17 +1,10 @@
 import type { Request, Response } from "express";
 import express from "express";
 import { getOriginalUrlBySlug, getUrlSlug } from "../../../domains/url-shortener/service";
-import {
-  originalUrlSchema,
-  slugParamSchema,
-  validateOriginalUrlBody,
-  validateSlugParams,
-} from "../validator";
 
 interface RequestTypedBody<T> extends Express.Request {
   body: T;
 }
-const urlShortenerRouter = express.Router();
 
 const handlePostUrlShortener = async (
   req: RequestTypedBody<{ originalURL: string }>,
@@ -49,15 +42,5 @@ const handleRedirectToOriginalURL = async (req: Request<{ slug: string }>, res: 
     return res.status(500).send("Internal Server Error");
   }
 };
-
-urlShortenerRouter.post(
-  "/api/url-shortener",
-  validateOriginalUrlBody(originalUrlSchema),
-  handlePostUrlShortener,
-);
-
-urlShortenerRouter.get("/:slug", validateSlugParams(slugParamSchema), handleRedirectToOriginalURL);
-
-export default urlShortenerRouter;
 
 export { handlePostUrlShortener, handleRedirectToOriginalURL };
