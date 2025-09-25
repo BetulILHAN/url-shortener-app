@@ -40,16 +40,16 @@ It supports URL normalization, deduplication, slug generation, click tracking, a
 Create a `.env` file at the root of the project with the following:
 
 ```env
-DB_HOST=localhost
-DB_PORT=5432
-DB_USER=postgres
-DB_PASS=root
-DB_NAME=url_shortener
+DB_HOST= enter your db host
+DB_PORT= enter your db port
+DB_USER= enter your db user
+DB_PASS= enter your db password
+DB_NAME= enter your db name
 
-PORT_BACKEND=3000
-HOST=http://localhost:3000
+PORT_BACKEND= enter your backend port
+HOST= enter your backend host
 LOG_LEVEL=info
-AUTHORIZED_CORS_ORIGIN=http://localhost:5173
+AUTHORIZED_CORS_ORIGIN= enter your frontend host
 
 
 ---
