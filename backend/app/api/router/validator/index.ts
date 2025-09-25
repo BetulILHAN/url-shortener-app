@@ -14,9 +14,7 @@ const validateOriginalUrlBody =
     const result = schema.safeParse(req.body);
 
     if (!result.success) {
-      const message = result.error.issues
-        .map((issue) => issue.message)
-        .join(", ");
+      const message = result.error.issues.map((issue) => issue.message).join(", ");
       return res.status(400).json({ error: message });
     }
 
@@ -29,9 +27,7 @@ const validateSlugParams =
     const result = schema.safeParse(req.params);
 
     if (!result.success) {
-      const message = result.error.issues
-        .map((issue) => issue.message)
-        .join(", ");
+      const message = result.error.issues.map((issue) => issue.message).join(", ");
       return res.status(400).json({
         error: "Invalid params",
         details: message,
@@ -42,9 +38,4 @@ const validateSlugParams =
     next();
   };
 
-export {
-  validateSlugParams,
-  validateOriginalUrlBody,
-  originalUrlSchema,
-  slugParamSchema,
-};
+export { validateSlugParams, validateOriginalUrlBody, originalUrlSchema, slugParamSchema };

@@ -11,7 +11,7 @@ interface URLShortener {
   originalURL: string;
   urlSlug: string;
   createdAt: Date;
-  clickCount?: number;
+  clickCount: number;
 }
 
 export type { URLShortenerRow, URLShortener };

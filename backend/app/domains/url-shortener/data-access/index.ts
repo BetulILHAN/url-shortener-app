@@ -13,21 +13,17 @@ const convertUserFromRow = (urlShortenerRow: URLShortenerRow): URLShortener => {
   };
 };
 
-const convertURLShortenerToRow = (
-  urlShortener: URLShortener,
-): URLShortenerRow => {
+const convertURLShortenerToRow = (urlShortener: URLShortener): URLShortenerRow => {
   return {
     id: urlShortener.id,
     original_url: urlShortener.originalURL,
     url_slug: urlShortener.urlSlug,
     created_at: urlShortener.createdAt,
-    click_count: urlShortener.clickCount ?? 0,
+    click_count: urlShortener.clickCount,
   };
 };
 
-const selectUrlSlugByOriginalUrl = async (
-  originalUrl: string,
-): Promise<string | undefined> => {
+const selectUrlSlugByOriginalUrl = async (originalUrl: string): Promise<string | undefined> => {
   const queryBuilder = dataBase<URLShortenerRow>(urlShortenerSchema);
   const selectedResult = await queryBuilder
     .select("url_slug")
@@ -37,9 +33,7 @@ const selectUrlSlugByOriginalUrl = async (
   return selectedResult?.url_slug;
 };
 
-const insertUrlShortener = async (
-  urlShortener: Omit<URLShortener, "clickCount">,
-): Promise<string | undefined> => {
+const insertUrlShortener = async (urlShortener: URLShortener): Promise<string | undefined> => {
   const queryBuilder = dataBase<URLShortenerRow>(urlShortenerSchema);
   const urlShortenerRow = convertURLShortenerToRow(urlShortener);
 

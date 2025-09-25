@@ -1,7 +1,4 @@
-import {
-  selectOriginalUrl,
-  selectUrlSlugByOriginalUrl,
-} from "../../data-access";
+import { selectOriginalUrl, selectUrlSlugByOriginalUrl } from "../../data-access";
 import { getOriginalUrlBySlug } from "./../index";
 
 const logger = {
@@ -12,7 +9,7 @@ const logger = {
 jest.mock("../../data-access");
 jest.mock("../../../../config/logger");
 jest.mock("uuid", () => ({
-  v4: () => "00000000-0000-0000-0000-000000000000",
+  v4: () => "123-uuid",
 }));
 jest.mock("nanoid", () => jest.fn(() => "123456SDI1"));
 

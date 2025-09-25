@@ -1,8 +1,4 @@
-import {
-  selectOriginalUrl,
-  insertUrlShortener,
-  selectUrlSlugByOriginalUrl,
-} from "../data-access";
+import { selectOriginalUrl, insertUrlShortener, selectUrlSlugByOriginalUrl } from "../data-access";
 import { v4 as uuidv4 } from "uuid";
 import { customAlphabet } from "nanoid";
 import logger from "../../../config/logger";
@@ -20,11 +16,12 @@ const createUrlShortener = async (originalUrl: string) => {
   const id = uuid();
 
   try {
-    const urlShortener: Omit<URLShortener, "clickCount"> = {
+    const urlShortener: URLShortener = {
       id: uuid(),
       originalURL: originalUrl,
       urlSlug: urlSlug(),
       createdAt: new Date(),
+      clickCount: 0,
     };
 
     return await insertUrlShortener(urlShortener);
@@ -43,18 +40,14 @@ const getUrlSlug = async (originalUrl: string): Promise<string | undefined> => {
   const existedUrlSlug = await selectUrlSlugByOriginalUrl(normalizedUrl);
   if (existedUrlSlug === undefined) {
     const createUrlSlug = await createUrlShortener(normalizedUrl);
-    logger.info(
-      `url shortener is created with the url slug : ${createUrlSlug}`,
-    );
+    logger.info(`url shortener is created with the url slug : ${createUrlSlug}`);
     return createUrlSlug;
   }
   logger.info(`url slug already existed: ${existedUrlSlug}`);
   return existedUrlSlug;
 };
 
-const getOriginalUrlBySlug = async (
-  urlSlug: string,
-): Promise<string | undefined> => {
+const getOriginalUrlBySlug = async (urlSlug: string): Promise<string | undefined> => {
   const originalUrl = await selectOriginalUrl(urlSlug);
 
   if (originalUrl === undefined) {

@@ -1,9 +1,6 @@
 import type { Request, Response } from "express";
 import express from "express";
-import {
-  getOriginalUrlBySlug,
-  getUrlSlug,
-} from "../../../domains/url-shortener/service";
+import { getOriginalUrlBySlug, getUrlSlug } from "../../../domains/url-shortener/service";
 import {
   originalUrlSchema,
   slugParamSchema,
@@ -39,16 +36,18 @@ const handlePostUrlShortener = async (
   }
 };
 
-const handleRedirectToOriginalURL = async (
-  req: Request<{ slug: string }>,
-  res: Response,
-) => {
-  const { slug } = req.params;
-  const originalUrl = await getOriginalUrlBySlug(slug);
-  if (!originalUrl) {
-    return res.status(404).send("URL NOT FOUND");
+const handleRedirectToOriginalURL = async (req: Request<{ slug: string }>, res: Response) => {
+  try {
+    const { slug } = req.params;
+    const originalUrl = await getOriginalUrlBySlug(slug);
+    if (!originalUrl) {
+      return res.status(404).send("URL NOT FOUND");
+    }
+    return res.redirect(originalUrl);
+  } catch (err) {
+    console.error("Error  redirecting original URL:", err);
+    return res.status(500).send("Internal Server Error");
   }
-  return res.redirect(originalUrl);
 };
 
 urlShortenerRouter.post(
@@ -57,11 +56,7 @@ urlShortenerRouter.post(
   handlePostUrlShortener,
 );
 
-urlShortenerRouter.get(
-  "/:slug",
-  validateSlugParams(slugParamSchema),
-  handleRedirectToOriginalURL,
-);
+urlShortenerRouter.get("/:slug", validateSlugParams(slugParamSchema), handleRedirectToOriginalURL);
 
 export default urlShortenerRouter;
 

@@ -4,12 +4,12 @@ import { handlePostUrlShortener, handleRedirectToOriginalURL } from "./index";
 
 jest.mock("../../../domains/url-shortener/service");
 jest.mock("uuid", () => ({
-  v4: () => "00000000-0000-0000-0000-000000000000",
+  v4: () => "123-uuid",
 }));
 jest.mock("nanoid", () => jest.fn(() => "123456SDI1"));
 
 describe("Unit tests for URL Shortener Handlers", () => {
-  describe("handlePostUrlShortener", () => {
+  describe("Unit tests for handlePostUrlShortener", () => {
     test("handlePostUrlShortener should return a shortened URL when original URL is valid", async () => {
       (getUrlSlug as jest.Mock).mockResolvedValue("123456SDI1");
 
