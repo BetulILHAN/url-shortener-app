@@ -12,15 +12,15 @@ const handlePostUrlShortener = async (
 ) => {
   try {
     const { originalURL } = req.body;
-    const result = await getUrlSlug(originalURL);
+    const urlSlug = await getUrlSlug(originalURL);
 
-    if (!result) {
-      return res.status(404).send("URL NOT FOUND");
+    if (!urlSlug) {
+      return res.status(500).send("Internal Server Error");
     }
 
     const port = process.env.PORT_BACKEND ?? 3001;
     const host = process.env.HOST ?? `http://localhost:${port}`;
-    const shortUrl = `${host}/${result}`;
+    const shortUrl = `${host}/${urlSlug}`;
 
     return res.send(shortUrl);
   } catch (err) {

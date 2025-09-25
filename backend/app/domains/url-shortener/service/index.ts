@@ -11,14 +11,18 @@ interface SqlError extends Error {
 }
 const uuid = uuidv4;
 
-const createUrlShortener = async (originalUrl: string) => {
+const createUrlShortener = async (originalUrl: string, retries = 5) => {
+  const normalizedUrl = normalizeUrl(originalUrl);
   const urlSlug = customAlphabet("1234567890abcdef", 10);
-  const id = uuid();
+
+  if (retries <= 0) {
+    throw new Error("Failed to generate unique slug after multiple attempts");
+  }
 
   try {
     const urlShortener: URLShortener = {
       id: uuid(),
-      originalURL: originalUrl,
+      originalURL: normalizedUrl,
       urlSlug: urlSlug(),
       createdAt: new Date(),
       clickCount: 0,
@@ -29,32 +33,45 @@ const createUrlShortener = async (originalUrl: string) => {
     const newError = error as SqlError;
     if (newError.code === "23505") {
       logger.error(`url slug ${urlSlug()} is already existed`);
-      return createUrlShortener(originalUrl);
+      return createUrlShortener(originalUrl, retries - 1);
     }
+    logger.error(`DB error on insert: ${newError.message}`);
+    throw error;
   }
 };
 
 const getUrlSlug = async (originalUrl: string): Promise<string | undefined> => {
   const normalizedUrl = normalizeUrl(originalUrl);
+  try {
+    const existedUrlSlug = await selectUrlSlugByOriginalUrl(normalizedUrl);
 
-  const existedUrlSlug = await selectUrlSlugByOriginalUrl(normalizedUrl);
-  if (existedUrlSlug === undefined) {
-    const createUrlSlug = await createUrlShortener(normalizedUrl);
-    logger.info(`url shortener is created with the url slug : ${createUrlSlug}`);
-    return createUrlSlug;
+    if (existedUrlSlug === undefined) {
+      const createUrlSlug = await createUrlShortener(normalizedUrl);
+      logger.info(`url shortener is created with the url slug : ${createUrlSlug}`);
+      return createUrlSlug;
+    }
+    logger.info(`url slug already existed: ${existedUrlSlug}`);
+    return existedUrlSlug;
+  } catch (error) {
+    logger.error(
+      `Error retrieving or creating slug for ${originalUrl}: ${(error as Error).message}`,
+    );
+    return undefined;
   }
-  logger.info(`url slug already existed: ${existedUrlSlug}`);
-  return existedUrlSlug;
 };
 
 const getOriginalUrlBySlug = async (urlSlug: string): Promise<string | undefined> => {
   const originalUrl = await selectOriginalUrl(urlSlug);
-
-  if (originalUrl === undefined) {
-    logger.error(`original url doesn't exist for url slug: ${urlSlug}`);
-    throw new Error("url not found");
+  try {
+    if (originalUrl === undefined) {
+      logger.warn(`original url doesn't exist for url slug: ${urlSlug}`);
+      return undefined;
+    }
+    logger.info(`original url ${originalUrl} is gotten`);
+    return originalUrl;
+  } catch (error) {
+    logger.error(`Error retrieving original URL for slug ${urlSlug}: ${(error as Error).message}`);
+    return undefined;
   }
-  logger.info(`original url ${originalUrl} is gotten`);
-  return originalUrl;
 };
 export { createUrlShortener, getOriginalUrlBySlug, getUrlSlug };

@@ -3,7 +3,7 @@ import logger from "../../../config/logger";
 import { URLShortener, URLShortenerRow } from "../../types";
 
 const urlShortenerSchema = "url_shortener";
-const convertUserFromRow = (urlShortenerRow: URLShortenerRow): URLShortener => {
+const convertUrlShortenerFromRow = (urlShortenerRow: URLShortenerRow): URLShortener => {
   return {
     id: urlShortenerRow.id,
     originalURL: urlShortenerRow.original_url,
