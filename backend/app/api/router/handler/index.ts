@@ -1,5 +1,4 @@
 import type { Request, Response } from "express";
-import express from "express";
 import { getOriginalUrlBySlug, getUrlSlug } from "../../../domains/url-shortener/service";
 
 interface RequestTypedBody<T> extends Express.Request {
